@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import memberData from "../../public/Member.json";
 
 export default function ApplicationForm() {
   const navigate = useNavigate();
@@ -30,20 +31,16 @@ export default function ApplicationForm() {
   });
 
   // ✅ Load members: first from localStorage, else from Member.json
-  useEffect(() => {
-    const stored = localStorage.getItem("members");
-    if (stored) {
-      setMembers(JSON.parse(stored));
-    } else {
-      fetch("/public/Member.json")
-        .then((res) => res.json())
-        .then((data) => {
-          setMembers(data);
-          localStorage.setItem("members", JSON.stringify(data));
-        })
-        .catch((err) => console.error("Error loading Member.json:", err));
-    }
-  }, []);
+ useEffect(() => {
+  const stored = localStorage.getItem("members");
+  if (stored) {
+    setMembers(JSON.parse(stored));
+  } else {
+    setMembers(memberData);
+    localStorage.setItem("members", JSON.stringify(memberData));
+  }
+}, []);
+
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
